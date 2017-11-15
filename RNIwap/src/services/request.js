@@ -1,6 +1,6 @@
 import { Schema, arrayOf, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
-import 'isomorphic-fetch';
+// import 'isomorphic-fetch';
 
 export default function request (endpoint, options) {
   console.log(endpoint);

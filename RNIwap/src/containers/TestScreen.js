@@ -21,7 +21,13 @@ class TestScreen extends React.Component {
   }
 
   componentDidMount() {
-    SplashScreen.hide();
+    // SplashScreen.hide();
+  }
+
+  testRender = (testResult) => {
+    if (testResult.isPending) return <Text>Loading</Text>;
+    if (testResult.error) return <Text>{(testResult.error[0] || testResult.error).message}</Text>;
+    return <Text>{testResult.data}</Text>;
   }
 
   render() {
@@ -30,8 +36,9 @@ class TestScreen extends React.Component {
 
     return (
       <Container>
-        <Text>{testResult}</Text>
+        <Text>{this.testRender(testResult)}</Text>
         <Button onPress={() => { dispatch(test()) }}><Text>Send Request</Text></Button>
+        <Button onPress={() => { dispatch(test(true)) }}><Text>Send Request Which Will Fail</Text></Button>
       </Container>
     );
   }
