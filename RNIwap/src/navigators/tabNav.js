@@ -2,7 +2,7 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import TestScreen from '../screens/TestScreen';
+import TestScreen from '../containers/TestScreen';
 
 const iconSize = 26;
 
@@ -55,9 +55,15 @@ export default TabNav = TabNavigator({
   swipeEnabled: false,
   tabBarOptions: {
     activeTintColor: '#409EFF',
+    labelStyle: {
+      fontSize: 12,
+    }
   },
   navigationOptions: {
     headerTintColor: '#fff',
     headerStyle: { backgroundColor: '#409EFF' },
+    headerTitleStyle: {
+      fontSize: 20
+    }
   }
 });

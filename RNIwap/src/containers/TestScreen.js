@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
-import { Container, Text } from 'native-base';
+import { Container, Text, Button } from 'native-base';
+import SplashScreen from 'react-native-splash-screen';
+
+import { test } from '../actions';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,15 +20,23 @@ class TestScreen extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+
   render() {
     let { dispatch } = this.props;
+    let { testResult } = this.props;
 
     return (
       <Container>
-        <Text>TEST</Text>
+        <Text>{testResult}</Text>
+        <Button onPress={() => { dispatch(test()) }}><Text>Send Request</Text></Button>
       </Container>
     );
   }
 };
 
-export default connect()(TestScreen);
+let mapStateToProps = ({ test }) => ({ testResult: test });
+
+export default connect(mapStateToProps)(TestScreen);
