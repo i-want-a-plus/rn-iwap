@@ -2,17 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, TabNavigator, StackNavigator } from 'react-navigation';
-import { Root } from 'native-base';
+import { Root, Text } from 'native-base';
 
 import TabNav from './tabNav';
 
-export const AppNavigator = StackNavigator({
-  Root: {
+import LoginScreen from '../containers/LoginScreen';
+
+export const MainNavigator = StackNavigator({
+  Tab: {
     screen: TabNav,
+  },
+}, {
+  headerMode: 'none'
+});
+
+export const AppNavigator = StackNavigator({
+  Main: {
+    screen: MainNavigator,
+    navigationOptions: {
+      headerMode: 'none',
+    }
+  },
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: ({ navigation: { goBack } }) => ({
+      title: 'Login',
+      headerLeft: <Text style={{ color: '#fff' }} onPress={ () => { goBack() } }> Cancel</Text>
+    })
   }
 }, {
   mode: 'modal',
-  header: null,
   navigationOptions: {
     headerTintColor: '#fff',
     headerStyle: { backgroundColor: '#409EFF' },

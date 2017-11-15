@@ -1,14 +1,19 @@
 import React from 'react';
 import { AppRegistry, AsyncStorage, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 
-import configureStore from './store/configureStore';
-
+import store from './store';
 import AppWithNavigationState from './navigators';
-
-let store = configureStore();
+import actions from './actions';
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    // SplashScreen.hide();
+    actions.performExtractUserFromStorage(this.props.dispatch);
+  }
+
   render() {
     StatusBar.setBarStyle('light-content', true);
     return (

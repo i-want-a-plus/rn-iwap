@@ -1,4 +1,11 @@
 export const GLOBAL_ERROR = 'GLOBAL_ERROR';
 
+export const AUTH_CHECK = 'AUTH_CHECK';
+
 export const TEST = 'TEST';
 export const TEST_REJECTED = 'TEST_REJECTED';
+
+export const USER_LOGIN = 'USER_LOGIN';
+export const USER_LOGIN_PREREG = 'USER_LOGIN_PREREG';
+export const USER_LOGIN_REJECTED = 'USER_LOGIN_REJECTED';
+export const USER_LOGIN_FULFILLED = 'USER_LOGIN_FULFILLED';
