@@ -1,10 +1,6 @@
-import * as types from './types';
+import * as testActions from './test';
+import * as authActions from './auth';
 
-import { api } from '../services';
+let actions = { ...testActions, ...authActions };
 
-export const test = (fail) => dispatch => dispatch({
-  type: types.TEST,
-  payload: fail ? api.fetchTestWillFail() : api.fetchTest()
-}).catch(e => {
-  dispatch({ type: types.GLOBAL_ERROR, payload: e });
-});
+export default actions;

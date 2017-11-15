@@ -3,6 +3,7 @@ import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import TestScreen from '../containers/TestScreen';
+import SettingScreen from '../containers/SettingScreen';
 
 const iconSize = 26;
 
@@ -36,7 +37,7 @@ export default TabNav = TabNavigator({
     }
   },
   Settings: {
-    screen: TestScreen,
+    screen: SettingScreen,
     navigationOptions: {
       title: 'Settings',
       tabBarLabel: 'Settings',
@@ -54,16 +55,21 @@ export default TabNav = TabNavigator({
   animationEnabled: false,
   swipeEnabled: false,
   tabBarOptions: {
-    activeTintColor: '#409EFF',
+    style: {
+      borderTopWidth: 0,
+      backgroundColor: '#fff'
+    },
+    activeBackgroundColor: '#409EFF',
+    tabStyle: {
+      borderRadius: 10,
+      margin: 1
+    },
+    activeTintColor: '#fff',
     labelStyle: {
       fontSize: 12,
-    }
+    },
   },
-  navigationOptions: {
-    headerTintColor: '#fff',
-    headerStyle: { backgroundColor: '#409EFF' },
-    headerTitleStyle: {
-      fontSize: 20
-    }
+  cardStyle: {
+    backgroundColor: '#fff'
   }
 });

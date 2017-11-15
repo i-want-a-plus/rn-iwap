@@ -1,27 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
 import { Container, Text, Button } from 'native-base';
-import SplashScreen from 'react-native-splash-screen';
 
-import { test } from '../actions';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-});
+import actions from '../actions';
 
 class TestScreen extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    // SplashScreen.hide();
   }
 
   testRender = (testResult) => {
@@ -37,8 +22,8 @@ class TestScreen extends React.Component {
     return (
       <Container>
         <Text>{this.testRender(testResult)}</Text>
-        <Button onPress={() => { dispatch(test()) }}><Text>Send Request</Text></Button>
-        <Button onPress={() => { dispatch(test(true)) }}><Text>Send Request Which Will Fail</Text></Button>
+        <Button onPress={() => { dispatch(actions.test()) }}><Text>Send Request</Text></Button>
+        <Button onPress={() => { dispatch(actions.test(true)) }}><Text>Send Request Which Will Fail</Text></Button>
       </Container>
     );
   }
