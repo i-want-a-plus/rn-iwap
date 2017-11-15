@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "postversion": "react-native-version"
+    "postversion": "RNV=android,ios react-native-version"
   },
   "dependencies": {
     "humps": "^2.0.1",
@@ -18,16 +18,16 @@
     "react-native-easy-grid": "^0.1.15",
     "react-native-quick-actions": "^0.3.6",
     "react-native-splash-screen": "^3.0.6",
-    "react-native-svg": "^6.0.0",
     "react-native-version": "^2.3.1",
+    "react-native-version-number": "^0.3.0",
     "react-navigation": "^1.0.0-beta.19",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-promise": "^0.5.3",
     "redux-promise-middleware": "^4.4.2",
-    "redux-saga": "^0.16.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "url-template": "^2.0.8"
   },
   "devDependencies": {
     "babel-jest": "^21.2.0",

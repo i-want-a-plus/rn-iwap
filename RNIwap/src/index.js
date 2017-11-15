@@ -11,7 +11,6 @@ export default class App extends React.Component {
 
   componentDidMount() {
     // SplashScreen.hide();
-    actions.performExtractUserFromStorage(this.props.dispatch);
   }
 
   render() {

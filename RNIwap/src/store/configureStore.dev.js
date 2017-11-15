@@ -4,20 +4,15 @@ import DevTools from '../containers/DevTools';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import globalErrorMiddleware from '../middlewares/error';
-import authMiddleware from '../middlewares/auth';
+import customizedMiddlewares from '../middlewares';
 
 export default function configureStore () {
   const store = createStore(
     rootReducer,
     compose(
-      applyMiddleware(
-        thunkMiddleware,
-        authMiddleware,
-        globalErrorMiddleware,
-        promiseMiddleware(),
-        createLogger()
-      ),
+      applyMiddleware(thunkMiddleware),
+      applyMiddleware(promiseMiddleware(), createLogger()),
+      customizedMiddlewares,
       DevTools.instrument()
     )
   );

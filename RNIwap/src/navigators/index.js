@@ -9,6 +9,7 @@ import iosTheme from '../../native-base-theme/variables/ios';
 import TabNav from './tabNav';
 
 import LoginScreen from '../containers/LoginScreen';
+import InitScreen from '../containers/InitScreen';
 
 export const MainNavigator = StackNavigator({
   Tab: {
@@ -24,6 +25,9 @@ export const MainNavigator = StackNavigator({
 export const AppNavigator = StackNavigator({
   Main: {
     screen: MainNavigator
+  },
+  Init: {
+    screen: InitScreen
   },
   Login: {
     screen: LoginScreen,

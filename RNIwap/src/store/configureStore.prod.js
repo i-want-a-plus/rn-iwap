@@ -1,18 +1,16 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import globalErrorMiddleware from '../middlewares/error';
-import authMiddleware from '../middlewares/auth';
+import customizedMiddlewares from '../middlewares';
 
 export default function configureStore () {
   const store = createStore(
     rootReducer,
-    applyMiddleware(
-      thunkMiddleware,
-      authMiddleware,
-      globalErrorMiddleware,
-      promiseMiddleware()
+    compose(
+      applyMiddleware(thunkMiddleware),
+      applyMiddleware(promiseMiddleware()),
+      customizedMiddlewares,
     )
   );
 

@@ -1,6 +1,22 @@
+import { NavigationActions } from 'react-navigation';
+
+import * as types from './types';
+
 import * as testActions from './test';
 import * as authActions from './auth';
 
-let actions = { ...testActions, ...authActions };
+export const appLoading = () => dispatch => dispatch({
+  type: types.APP_LOADING,
+  payload: Promise.all([
+    authActions.performExtractUserFromStorage(dispatch)
+  ])
+});
+
+export const navigateToMainTabView = NavigationActions.navigate({
+  routeName: 'Main',
+  params: {}
+});
+
+let actions = { ...testActions, ...authActions, appLoading };
 
 export default actions;

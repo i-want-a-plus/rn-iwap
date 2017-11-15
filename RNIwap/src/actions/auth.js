@@ -37,8 +37,19 @@ export const performUserLogin = user => dispatch => dispatch({
   return dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });
 
+export const performUserLogout = () => dispatch => dispatch({
+  type: types.USER_LOGOUT,
+  payload: Promise.all([
+    AsyncStorage.removeItem('@iwap:user')
+  ])
+});
+
 export const performExtractUserFromStorage = dispatch => {
-  AsyncStorage.getItem('@iwap:user').then(JSON.parse).then(res => {
-    console.log(res);
+  console.log(dispatch);
+  return AsyncStorage.getItem('@iwap:user').then(JSON.parse).then(res => {
+    if (res) dispatch({
+      type: types.USER_LOGIN_FULFILLED,
+      payload: res
+    });
   });
 };

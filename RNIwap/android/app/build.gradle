@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-version-number')
     compile project(':react-native-quick-actions')
     compile project(':react-native-splash-screen')
     compile fileTree(dir: "libs", include: ["*.jar"])
