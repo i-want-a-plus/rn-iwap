@@ -2,15 +2,16 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import TestScreen from '../containers/TestScreen';
+import CourseSearchScreen from '../containers/CourseSearchScreen';
 import SettingScreen from '../containers/SettingScreen';
 
 const iconSize = 26;
 
 export default TabNav = TabNavigator({
   Course: {
-    screen: TestScreen,
+    screen: CourseSearchScreen,
     navigationOptions: {
+      header: null,
       title: 'Course',
       tabBarLabel: 'Course',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -23,7 +24,7 @@ export default TabNav = TabNavigator({
     }
   },
   Professor: {
-    screen: TestScreen,
+    screen: CourseSearchScreen,
     navigationOptions: {
       title: 'Professor',
       tabBarLabel: 'Professor',

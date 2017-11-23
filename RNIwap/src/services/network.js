@@ -1,13 +1,16 @@
 import request from './request';
 import template from 'url-template';
+import { encodeQueryData } from '../utils';
 
 const Network = endpoint => {
 
   let t = template.parse(`http://localhost:8080/api/${endpoint}`);
 
-  let buildURL = t.expand;
+  let buildURL = (exp, path) => {
+    path = encodeQueryData(path);
+    return t.expand(exp) + (path ? `?${path}` : '');
+  };
 
-  // Default options used for every request
   const defaultOptions = {
     // mode: 'cors',
     headers: {
@@ -17,8 +20,8 @@ const Network = endpoint => {
   };
 
   return {
-    post: (path, body, options = {}) => {
-      return request(buildURL(path), Object.assign(
+    post: (exp, path, body, options = {}) => {
+      return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
         {
@@ -28,24 +31,24 @@ const Network = endpoint => {
       ));
     },
 
-    get: (path, options = {}) => {
-      return request(buildURL(path), Object.assign(
+    get: (exp, path, options = {}) => {
+      return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
         { method: 'GET' }
       ));
     },
 
-    update: (path, body, options = {}) => {
-      return request(buildURL(path), Object.assign(
+    update: (exp, path, body, options = {}) => {
+      return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
         { method: 'PUT' }
       ));
     },
 
-    delete: (path, options = {}) => {
-      return request(buildURL(path), Object.assign(
+    delete: (exp, path, options = {}) => {
+      return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
         { method: 'DELETE' }

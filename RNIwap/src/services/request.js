@@ -1,9 +1,8 @@
 import { Schema, arrayOf, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
-// import 'isomorphic-fetch';
 
 export default function request (endpoint, options) {
-  console.log(endpoint);
+  console.log('fetch', endpoint, options);
   return new Promise((resolve, reject) => {
     if (!endpoint) reject(new Error('URL parameter required'));
     if (!options) reject(new Error('Options parameter required'));

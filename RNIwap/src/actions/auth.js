@@ -22,6 +22,15 @@ export const navigateToLoginPage = NavigationActions.navigate({
   params: {}
 });
 
+export const performUserRegister = user => dispatch => dispatch({
+  type: types.USER_REGISTER,
+  payload: api.fetchUserRegister(user)
+}).then(() => {
+  return performUserLogin(user)(dispatch);
+}).catch(e => {
+  return dispatch({ type: types.GLOBAL_ERROR, payload: e });
+});
+
 export const performUserLogin = user => dispatch => dispatch({
   type: types.USER_LOGIN,
   payload: Promise.all([
@@ -45,7 +54,6 @@ export const performUserLogout = () => dispatch => dispatch({
 });
 
 export const performExtractUserFromStorage = dispatch => {
-  console.log(dispatch);
   return AsyncStorage.getItem('@iwap:user').then(JSON.parse).then(res => {
     if (res) dispatch({
       type: types.USER_LOGIN_FULFILLED,

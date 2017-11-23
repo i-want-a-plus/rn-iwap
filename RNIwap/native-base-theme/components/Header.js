@@ -123,7 +123,7 @@ export default (variables = variable) => {
     },
     ".rounded": {
       "NativeBase.Item": {
-        borderRadius: platform === "ios" && platformStyle !== "material" ? 25 : 3,
+        borderRadius: platform === "ios" && platformStyle !== "material" ? 10 : 3,
       },
     },
     "NativeBase.Left": {

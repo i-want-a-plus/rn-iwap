@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Content, Text, Button, List, ListItem, Separator } from 'native-base';
-import VersionNumber from 'react-native-version-number';
 
 import actions from '../actions';
 
@@ -10,7 +9,7 @@ class TestScreen extends React.Component {
     super(props);
 
     this.state = {
-      appVersion: 'pending'
+      appVersion: 'NOT_APPLICABLE'
     };
   }
 
@@ -19,7 +18,10 @@ class TestScreen extends React.Component {
   }
 
   getVersion () {
-    this.setState({ appVersion: `${VersionNumber.appVersion}` });
+    if (process.env.NODE_ENV === 'production') {
+      let VersionNumber = require('react-native-version-number');
+      if (VersionNumber) this.setState({ appVersion: `${VersionNumber.appVersion}` });
+    }
   }
 
   render () {

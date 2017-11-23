@@ -7,7 +7,7 @@ import actions from '../actions';
 
 import nav from './nav';
 import auth from './auth';
-import test from './test';
+import * as courseReducers from './course';
 
 const AppReducer = combineReducers({
   init: function authReducer (state = {}, action) {
@@ -20,7 +20,7 @@ const AppReducer = combineReducers({
   },
   nav,
   auth,
-  test
+  ...courseReducers
 });
 
 export default AppReducer;

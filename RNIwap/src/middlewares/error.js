@@ -10,7 +10,7 @@ export default function globalErrorMiddleware () {
     ];
 
     if (action && action.type === GLOBAL_ERROR && action.payload) {
-      showErrorToast(_.get(action.payload, '0.message'));
+      showErrorToast(_.get(action.payload, 'message') || _.get(action.payload, '0.message'));
     }
 
     if (!isPromise(action.payload)) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Animated, Easing } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, TabNavigator, StackNavigator } from 'react-navigation';
@@ -10,12 +11,20 @@ import TabNav from './tabNav';
 
 import LoginScreen from '../containers/LoginScreen';
 import InitScreen from '../containers/InitScreen';
+import CourseScreen from '../containers/CourseScreen';
 
 export const MainNavigator = StackNavigator({
   Tab: {
     screen: TabNav,
   },
+  Course: {
+    screen: CourseScreen,
+    navigationOptions: {
+      header: null
+    }
+  }
 }, {
+  mode: 'stack',
   headerMode: 'none',
   cardStyle: {
     backgroundColor: '#fff'
@@ -31,10 +40,10 @@ export const AppNavigator = StackNavigator({
   },
   Login: {
     screen: LoginScreen,
-    navigationOptions: ({ navigation: { goBack } }) => ({
-      title: 'Login',
-      headerLeft: <Text style={{ color: '#000' }} onPress={ () => { goBack() } }>   Cancel</Text>
-    })
+    navigationOptions: {
+      header: null
+    },
+    transitionProps: '123'
   }
 }, {
   mode: 'modal',
@@ -50,8 +59,29 @@ export const AppNavigator = StackNavigator({
       fontSize: 18
     }
   },
+  transitionConfig : (transitionProps) => ({
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps;
+      const { index } = scene;
+      const width = layout.initWidth;
+      const translateX = position.interpolate({
+        inputRange: [index - 1, index, index + 1],
+        outputRange: [width, 0, 0],
+      });
+      if (
+        sceneProps.scene.route.routeName === "Login"
+      ) {
+        return {};
+      }
+      return { transform: [{ translateX }] };
+    },
+    containerStyle: {
+      backgroundColor: '#fff'
+    }
+  }),
   cardStyle: {
-    backgroundColor: '#fff'
+    backgroundColor: 'transparent',
+    opacity: 1
   }
 });
 

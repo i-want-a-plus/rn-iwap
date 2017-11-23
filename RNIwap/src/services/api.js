@@ -1,6 +1,7 @@
 import Network from './network';
 
-export const fetchUserLogin = user => Network('user/login').post(null, user);
+export const fetchUserRegister = user => Network('user').post(null, null, user);
+export const fetchUserLogin = user => Network('user/login').post(null, null, user);
 
-export const fetchTest = () => Network('test').get();
-export const fetchTestWillFail = () => Network('test').post();
+export const fetchCourse = query => Network('course/{id}').get(query);
+export const fetchCourseList = query => Network('course').get(null, query);
