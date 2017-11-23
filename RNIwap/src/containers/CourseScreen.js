@@ -10,8 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import ModelBox from '../components/ModelBox';
 
-import HeaderWithSearchBar from '../components/HeaderWithSearchBar';
-import CourseList from '../components/CourseList';
+import SectionList from '../components/SectionList';
 import FavoriteButton from '../components/FavoriteButton';
 import DetailList from '../components/DetailList';
 
@@ -36,8 +35,8 @@ const styles = StyleSheet.create({
   headContainer: {
     paddingTop: 42,
     marginLeft: 42,
-    paddingRight: 20,
-    paddingBottom: 20
+    paddingRight: 30,
+    paddingBottom: 10
   },
   footContainer: {
     flexDirection: 'row',
@@ -63,12 +62,11 @@ const styles = StyleSheet.create({
   },
   detailList: {
     marginTop: 10,
-    marginLeft: -20
+    marginLeft: -20,
+    marginBottom: 10
   },
   modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 300
+    height: 130
   }
 });
 
@@ -84,9 +82,13 @@ class CourseScreen extends React.Component {
   }
 
   componentDidMount () {
-    let c = { id: this.props.navigation.state.params.courseId };
-    this.setState(c);
-    this.props.dispatch(actions.performCourseFetch(c));
+    let state = { id: this.props.navigation.state.params.courseId };
+    this.setState(state);
+    if (!this.props.courses[state.id]) {
+      this.props.dispatch(actions.performCourseFetch(state));
+    } else {
+      this.updatePlotData(this.props, state);
+    }
   }
 
   componentWillUnmount () {
@@ -94,7 +96,13 @@ class CourseScreen extends React.Component {
   }
 
   componentWillReceiveProps (newProps) {
-    let course = newProps.courses[this.state.id];
+    this.updatePlotData(newProps, this.state);
+  }
+
+  updatePlotData (newProps, state) {
+    console.log('mount', newProps);
+    if (!_.has(newProps, [ 'courses', state.id, 'isPending' ])) return;
+    let course = newProps.courses[state.id];
     if (!course.isPending) {
       let plotData = _.map(reduce(course.Sections), ({ stat }) => {
         return _.zipWith(
@@ -202,9 +210,16 @@ class CourseScreen extends React.Component {
               {this.detailList(course)}
             </View>
             {this.state.plotData && this.plot()}
-            <View style={styles.headContainer}>
+            <View style={StyleSheet.flatten([ styles.headContainer, styles.inline ])}>
               <Text style={styles.subtitle}>Sections</Text>
-              <Button onPress={() => this.refs.modal4.open()}><Text>Open</Text></Button>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                <TouchableWithoutFeedback onPress={() => this.refs.linkModel.open()}>
+                  <Icon name="ios-funnel-outline" style={{ fontSize: 24 }} />
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+            <View>
+              <SectionList sections={course.Sections} />
             </View>
             <View style={styles.footContainer}>
               <FavoriteButton />
@@ -212,8 +227,11 @@ class CourseScreen extends React.Component {
           </Content>
         </ScrollView>
 
-        <ModelBox style={styles.modal} position={"bottom"} ref={"modal4"}>
-          <Text style={styles.text}>Modal on bottom with backdrop</Text>
+        <ModelBox style={styles.modal} position="bottom" ref="linkModel">
+          <Text style={styles.subtitle}>Link sections by</Text>
+          <Button block light style={{ marginTop: 20 }}>
+            <Text>Instructor</Text>
+          </Button>
         </ModelBox>
       </Container>
     );

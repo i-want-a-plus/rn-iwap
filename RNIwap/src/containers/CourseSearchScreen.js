@@ -1,10 +1,11 @@
 import React from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Content, Item, Icon, Input, Text, Button } from 'native-base';
 
 import HeaderWithSearchBar from '../components/HeaderWithSearchBar';
 import CourseList from '../components/CourseList';
+import LogoBackground from '../components/LogoBackground';
 
 import actions from '../actions';
 
@@ -31,9 +32,14 @@ class CourseSearchScreen extends React.Component {
         <HeaderWithSearchBar
           onSearch={(query) => { this.handleSearch(query); }}
         />
-        <Content>
-          {courseSearch.data && <CourseList courses={courseSearch.data} />}
-        </Content>
+        {courseSearch.data === null
+          ? <LogoBackground />
+          : courseSearch.isPending
+            ? <ActivityIndicator />
+            : <Content>
+                {courseSearch.data && <CourseList courses={courseSearch.data} />}
+              </Content>
+        }
       </Container>
     );
   }

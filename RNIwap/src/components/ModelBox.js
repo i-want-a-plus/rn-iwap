@@ -26,7 +26,26 @@ var screen = Dimensions.get('window');
 var styles = StyleSheet.create({
 
   wrapper: {
-    backgroundColor: "white"
+    backgroundColor: 'white',
+    shadowColor: '#000000',
+    shadowRadius: 20,
+    shadowOpacity: 0.3,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    padding: 15
+  },
+
+  handlerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 5
+  },
+
+  handler: {
+    backgroundColor: '#ccc',
+    width: 40,
+    height: 5,
+    borderRadius: 2
   },
 
   transparent: {
@@ -425,6 +444,9 @@ var ModalBox = createReactClass({
         onLayout={this.onViewLayout}
         style={[styles.wrapper, size, this.props.style, {transform: [{translateY: this.state.position}, {translateX: offsetX}]} ]}
         {...this.state.pan.panHandlers}>
+        <View style={styles.handlerContainer}>
+          <View style={styles.handler}></View>
+        </View>
         {this.props.children}
       </Animated.View>
     )
