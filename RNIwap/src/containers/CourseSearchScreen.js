@@ -20,7 +20,6 @@ class CourseSearchScreen extends React.Component {
 
   handleSearch (query) {
     this.props.dispatch(actions.performCourseSearch({ subject: query }))
-    console.log(query);
   }
 
   render() {
@@ -32,10 +31,10 @@ class CourseSearchScreen extends React.Component {
         <HeaderWithSearchBar
           onSearch={(query) => { this.handleSearch(query); }}
         />
-        {courseSearch.data === null
-          ? <LogoBackground />
-          : courseSearch.isPending
-            ? <ActivityIndicator />
+        {courseSearch.isPending
+          ? <ActivityIndicator size="large" style={{ marginTop: 30 }} />
+          : courseSearch.data === null || !courseSearch.data.length
+            ? <LogoBackground />
             : <Content>
                 {courseSearch.data && <CourseList courses={courseSearch.data} />}
               </Content>

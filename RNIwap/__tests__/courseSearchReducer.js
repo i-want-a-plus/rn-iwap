@@ -1,8 +1,7 @@
-import testReducer from '../src/reducers/test';
-import { test } from '../src/actions';
-import { TEST } from '../src/actions/types';
+import { courseSearch as courseSearchReducer } from '../src/reducers/course';
+import { COURSE_SEARCH } from '../src/actions/types';
 
-describe('Test Reducers', () => {
+describe('Course Search Reducers', () => {
   const initialState = {
     error: false,
     isPending: false,
@@ -11,11 +10,11 @@ describe('Test Reducers', () => {
   const irrelevantAction = { type: 'IRRELEVANT_ACTION' };
 
   it(`returns the initialState when no state`, () => {
-    expect(testReducer(undefined, irrelevantAction)).toEqual(initialState);
+    expect(courseSearchReducer(undefined, irrelevantAction)).toEqual(initialState);
   });
 
 
-  describe(`TEST`, () => {
+  describe(`COURSE_SEARCH`, () => {
     beforeEach(() => {
       this.previousState = {
         some: 'test random state'
@@ -24,11 +23,11 @@ describe('Test Reducers', () => {
 
     describe(`PENDING`, () => {
       const requestAction = {
-        type: `${TEST}_PENDING`
+        type: `${COURSE_SEARCH}_PENDING`
       };
 
       it(`sets previousState with isPending:true`, () => {
-        const newState = testReducer(this.previousState, requestAction);
+        const newState = courseSearchReducer(this.previousState, requestAction);
         expect(newState).toEqual({
           ...this.previousState,
           isPending: true
@@ -38,13 +37,13 @@ describe('Test Reducers', () => {
 
     describe(`REJECTED`, () => {
       const rejectAction = {
-        type: `${TEST}_REJECTED`,
+        type: `${COURSE_SEARCH}_REJECTED`,
         error: true,
         data: new Error('some error')
       };
 
       it(`sets previousState with error from action`, () => {
-        const newState = testReducer(this.previousState, rejectAction);
+        const newState = courseSearchReducer(this.previousState, rejectAction);
         expect(newState).toEqual({
           ...this.previousState,
           error: rejectAction.payload,
@@ -55,17 +54,17 @@ describe('Test Reducers', () => {
 
     describe(`FULFILLED`, () => {
       const fulfillAction = {
-        type: `${TEST}_FULFILLED`,
+        type: `${COURSE_SEARCH}_FULFILLED`,
         payload: {
           test: 'test payload'
         }
       };
 
       it(`sets previousState with data as action's payload`, () => {
-        const newState = testReducer(this.previousState, fulfillAction);
+        const newState = courseSearchReducer(this.previousState, fulfillAction);
         expect(newState).toEqual({
           ...this.previousState,
-          data: JSON.stringify(fulfillAction.payload),
+          data: fulfillAction.payload,
           isPending: false,
           error: false
         });

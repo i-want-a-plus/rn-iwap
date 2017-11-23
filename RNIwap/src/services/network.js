@@ -4,7 +4,11 @@ import { encodeQueryData } from '../utils';
 
 const Network = endpoint => {
 
-  let t = template.parse(`http://localhost:8080/api/${endpoint}`);
+  let t = template.parse(
+    process.env.NODE_ENV === 'production'
+      ? `https://iwanta.plus/api/${endpoint}`
+      : `http://localhost:8080/api/${endpoint}`
+  );
 
   let buildURL = (exp, path) => {
     path = encodeQueryData(path);
