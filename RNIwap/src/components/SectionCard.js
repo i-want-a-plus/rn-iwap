@@ -78,9 +78,9 @@ class SectionCard extends React.Component {
               transition="scale"
               style={StyleSheet.flatten([
                 styles.card,
-                { backgroundColor:
+                section.PastSection.averageGpa ? { backgroundColor:
                   shadeColor(colorMap[section.PastSection.averageGpa.toFixed(1) * 10], -0.25)
-                },
+                } : { backgroundColor: '#777' },
                 this.state.pressed ? { transform: [{ scale: 0.95 }] } : {}
               ])}
               underlayColor='#fff'>
@@ -88,9 +88,9 @@ class SectionCard extends React.Component {
                 <Text style={styles.lineB}>{section.crn}</Text>
                 <View style={styles.lineC}>
                   <Text style={styles.lineCA}>GPA</Text>
-                  <Text style={styles.lineCB}>{section.PastSection.averageGpa.toFixed(2)}</Text>
+                  <Text style={styles.lineCB}>{section.PastSection.averageGpa ? section.PastSection.averageGpa.toFixed(2) : '---'}</Text>
                   <Text style={styles.lineCA}>Student Count</Text>
-                  <Text style={styles.lineCB}>{section.PastSection.totalStudentCount}</Text>
+                  <Text style={styles.lineCB}>{section.PastSection.totalStudentCount || '---'}</Text>
                 </View>
               </View>
             </Animatable.View>
@@ -105,9 +105,9 @@ SectionCard.propTypes = {
     id: PropTypes.number.isRequired,
     crn: PropTypes.string.isRequired,
     PastSection: PropTypes.shape({
-      averageGpa: PropTypes.number.isRequired,
-      totalStudentCount: PropTypes.number.isRequired,
-      sd: PropTypes.number.isRequired
+      averageGpa: PropTypes.number,
+      totalStudentCount: PropTypes.number,
+      sd: PropTypes.number
     }).isRequired
   }).isRequired
 };

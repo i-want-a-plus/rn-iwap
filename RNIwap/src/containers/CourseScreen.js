@@ -104,16 +104,19 @@ class CourseScreen extends React.Component {
     if (!_.has(newProps, [ 'courses', state.id, 'isPending' ])) return;
     let course = newProps.courses[state.id];
     if (!course.isPending) {
-      let plotData = _.map(reduce(course.Sections), ({ stat }) => {
-        return _.zipWith(
-          gradeMap.gradeText,
-          gradeMap.grade,
-          gradeMap.dist,
-          (text, grade, key) => ({
-            text, grade, value: _.get(stat, key), percent: _.get(stat, key) / stat.totalStudentCount
-          })
-        );
-      })
+      let plotData = null;
+      if (course.totalStudentCount) {
+        plotData = _.map(reduce(course.Sections), ({ stat }) => {
+          return _.zipWith(
+            gradeMap.gradeText,
+            gradeMap.grade,
+            gradeMap.dist,
+            (text, grade, key) => ({
+              text, grade, value: _.get(stat, key), percent: _.get(stat, key) / stat.totalStudentCount
+            })
+          );
+        });
+      }
       console.log('plot data', plotData);
       this.setState({ plotData });
     }
