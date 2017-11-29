@@ -206,11 +206,11 @@ class CourseScreen extends React.Component {
     let course = courses[this.state.id] || {};
 
     return (
-      <Container style={{ backgroundColor: '#fff', paddingBottom: 20 }}>
+      <Container style={{ backgroundColor: '#fff' }}>
         <ScrollView
           onScroll={this.handleScroll}
           scrollEventThrottle={16}>
-          <Content>
+          <Content style={{ paddingBottom: 20 }}>
             {this.goBackButton}
             <View style={styles.headContainer}>
               <View style={styles.inline}>

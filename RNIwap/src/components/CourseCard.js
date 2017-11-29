@@ -79,9 +79,9 @@ class CourseCard extends React.Component {
               transition="scale"
               style={StyleSheet.flatten([
                 styles.card,
-                { backgroundColor:
+                course.averageGpa ? { backgroundColor:
                   shadeColor(colorMap[course.averageGpa.toFixed(1) * 10], -0.25)
-                },
+                } : { backgroundColor: '#777' },
                 this.state.pressed ? { transform: [{ scale: 0.95 }] } : {}
               ])}
               underlayColor='#fff'>
@@ -90,9 +90,9 @@ class CourseCard extends React.Component {
                 <Text style={styles.lineB}>{course.title}</Text>
                 <View style={styles.lineC}>
                   <Text style={styles.lineCA}>GPA</Text>
-                  <Text style={styles.lineCB}>{course.averageGpa.toFixed(2)}</Text>
+                  <Text style={styles.lineCB}>{course.averageGpa.toFixed(2) || '---'}</Text>
                   <Text style={styles.lineCA}>Student Count</Text>
-                  <Text style={styles.lineCB}>{course.totalStudentCount}</Text>
+                  <Text style={styles.lineCB}>{course.totalStudentCount || '---'}</Text>
                 </View>
               </View>
             </Animatable.View>
