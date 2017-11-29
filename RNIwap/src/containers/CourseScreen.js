@@ -11,6 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import ModelBox from '../components/ModelBox';
 import Loading from '../components/Loading';
+import CollapseView from '../components/CollapseView';
 
 import SectionList from '../components/SectionList';
 import FavoriteButton from '../components/FavoriteButton';
@@ -266,9 +267,11 @@ class CourseScreen extends React.Component {
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View>
-              <SectionList sections={this.state.reducedSections} />
-            </View>
+            {this.state.reducedSections && <View>
+              <CollapseView collapsed={_.get(this.state.reducedSections, 'length') > 2}>
+                <SectionList sections={this.state.reducedSections} />
+              </CollapseView>
+            </View>}
             <View style={styles.footContainer}>
               <FavoriteButton />
             </View>
