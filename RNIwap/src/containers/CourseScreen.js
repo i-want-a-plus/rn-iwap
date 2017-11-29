@@ -20,17 +20,24 @@ import { gradeMap } from '../utils/reduce';
 import actions from '../actions';
 
 const styles = StyleSheet.create({
-  closeButton: {
-    color: '#aaa'
-  },
   inline: {
     flexDirection: 'row',
     alignItems: 'center'
   },
   closeButtonContainer: {
     position: 'absolute',
-    left: 16,
-    top: 36
+    left: 0,
+    top: 36,
+    width: 45,
+    height: 30
+  },
+  closeButton: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  closeButtonIcon: {
+    color: '#aaa',
+    textAlign: 'center'
   },
   headContainer: {
     paddingTop: 42,
@@ -133,8 +140,9 @@ class CourseScreen extends React.Component {
 
   goBackButton = (<View style={styles.closeButtonContainer}>
     <TouchableWithoutFeedback
+      style={styles.closeButton}
       onPress={() => this.props.dispatch({ type: 'GOBACK' })}>
-      <Icon name="ios-arrow-back" style={styles.closeButton}></Icon>
+      <Icon name="ios-arrow-back" style={styles.closeButtonIcon}></Icon>
     </TouchableWithoutFeedback>
   </View>)
 
