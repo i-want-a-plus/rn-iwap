@@ -17,7 +17,12 @@ class HeaderWithSearchBar extends React.Component {
 
   handleSearch () {
     Keyboard.dismiss();
-    this.props.onSearch(this.state.query);
+    this.props.onSearch && this.props.onSearch(this.state.query);
+  }
+
+  handleChange (t) {
+    this.setState({ query: t });
+    this.props.onChange && this.props.onChange(t);
   }
 
   render() {
@@ -27,11 +32,15 @@ class HeaderWithSearchBar extends React.Component {
       <Header searchBar rounded>
         <Item>
           <Icon name="ios-search" />
-          <Input placeholder="Search course"
-            onBlur={() => {this.setState({ isFocus: false })}}
-            onFocus={() => {this.setState({ isFocus: true })}}
-            onChangeText={(t) => this.setState({ query: t })}
-            onSubmitEditing={() => { this.handleSearch() }}
+          <Input placeholder={this.props.placeholder}
+            autoCapitalize="none"
+            blurOnSubmit={true}
+            returnKeyType="search"
+            clearButtonMode="always"
+            onBlur={() => { this.setState({ isFocus: false }); }}
+            onFocus={() => { this.setState({ isFocus: true }); }}
+            onChangeText={(t) => { this.handleChange(t); }}
+            onSubmitEditing={() => { this.handleSearch(); }}
           />
         </Item>
         {this.state.isFocus && <Button transparent small primary onPress={Keyboard.dismiss}><Text>Cancel</Text></Button>}

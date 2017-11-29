@@ -46,7 +46,7 @@ let pastSectionReducer = pastSections => {
 let SectionReducer = Sections => {
   return _.assign(
     {},
-    // TODO: Section reduce
+    _.reduce(Sections, (accumulation, current) => require('./intersect')(accumulation, current), Sections[0]),
     { stat: pastSectionReducer(_.map(Sections, ({ PastSection }) => PastSection)) }
   );
 };

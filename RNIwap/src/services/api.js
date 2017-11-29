@@ -5,3 +5,5 @@ export const fetchUserLogin = user => Network('user/login').post(null, null, use
 
 export const fetchCourse = query => Network('course/{id}').get(query);
 export const fetchCourseList = query => Network('course').get(null, query);
+
+export const fetchProfessorList = query => Network('professor/ac').get(null, query);

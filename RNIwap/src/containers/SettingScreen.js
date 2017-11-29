@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Content, Text, Button, List, ListItem, Separator } from 'native-base';
+import {
+  Container, Content, Text, Button, List, ListItem, Separator,
+  Left, Body, Right, Icon, Switch
+} from 'native-base';
 
 import actions from '../actions';
 
@@ -52,8 +55,63 @@ class TestScreen extends React.Component {
           }
           <Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
+            <ListItem icon first>
+              <Left>
+                <Icon name="star" />
+              </Left>
+              <Body>
+                <Text>Favorites</Text>
+              </Body>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+            <ListItem icon>
+              <Left>
+                <Icon name="chatboxes" />
+              </Left>
+              <Body>
+                <Text>Comments</Text>
+              </Body>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+            <ListItem icon>
+              <Left>
+                <Icon name="alarm" />
+              </Left>
+              <Body>
+                <Text>Notifications</Text>
+              </Body>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+            <ListItem icon last>
+              <Left>
+                <Icon name="paper-plane" />
+              </Left>
+              <Body>
+                <Text>Push Notification</Text>
+              </Body>
+              <Right>
+                <Switch value={false} />
+              </Right>
+            </ListItem>
+          </List>
+          <Separator bordered />
+          <List style={{ backgroundColor: '#fff' }}>
             <ListItem first>
               <Text>Version {this.state.appVersion}</Text>
+            </ListItem>
+            <ListItem icon>
+              <Body>
+                <Text>Licenses</Text>
+              </Body>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
             </ListItem>
             <ListItem last>
               <Text>About</Text>

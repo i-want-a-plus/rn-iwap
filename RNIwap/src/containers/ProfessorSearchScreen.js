@@ -1,17 +1,17 @@
 import React from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Content, Item, Icon, Input, Text, Button } from 'native-base';
 
 import Loading from '../components/Loading';
 
 import HeaderWithSearchBar from '../components/HeaderWithSearchBar';
-import CourseList from '../components/CourseList';
+import ProfessorList from '../components/ProfessorList';
 import LogoBackground from '../components/LogoBackground';
 
 import actions from '../actions';
 
-class CourseSearchScreen extends React.Component {
+class ProfessorSearchScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -21,25 +21,25 @@ class CourseSearchScreen extends React.Component {
   }
 
   handleSearch (query) {
-    this.props.dispatch(actions.performCourseSearch({ subject: query }))
+    this.props.dispatch(actions.performProfessorSearch({ query }));
   }
 
   render() {
     let { dispatch } = this.props;
-    let { courseSearch } = this.props;
+    let { professorSearch } = this.props;
 
     return (
       <Container>
         <HeaderWithSearchBar
-          onSearch={(query) => { this.handleSearch(query); }}
-          placeholder="Search course"
+          onChange={(query) => { this.handleSearch(query); }}
+          placeholder="Search professor"
         />
-        {courseSearch.isPending
+        {professorSearch.isPending
           ? <Loading />
-          : courseSearch.data === null || !courseSearch.data.length
+          : professorSearch.data === null || !professorSearch.data.length
             ? <LogoBackground />
             : <Content>
-                {courseSearch.data && <CourseList courses={courseSearch.data} />}
+                {professorSearch.data && <ProfessorList professors={professorSearch.data} />}
               </Content>
         }
       </Container>
@@ -47,6 +47,6 @@ class CourseSearchScreen extends React.Component {
   }
 };
 
-let mapStateToProps = ({ courseSearch }) => ({ courseSearch });
+let mapStateToProps = ({ professorSearch }) => ({ professorSearch });
 
-export default connect(mapStateToProps)(CourseSearchScreen);
+export default connect(mapStateToProps)(ProfessorSearchScreen);

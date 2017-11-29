@@ -20,7 +20,7 @@ class SectionList extends React.Component {
         <FlatList
           style={{ paddingTop: 10, paddingBottom: 10 }}
           data={sections}
-          keyExtractor={({ id }) => id}
+          keyExtractor={({ id, _id }) => id || _id}
           renderItem={({ item }) => <SectionCard section={item} />}
         />
       </View>

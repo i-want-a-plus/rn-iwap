@@ -3,6 +3,7 @@ import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import CourseSearchScreen from '../containers/CourseSearchScreen';
+import ProfessorSearchScreen from '../containers/ProfessorSearchScreen';
 import SettingScreen from '../containers/SettingScreen';
 
 const iconSize = 26;
@@ -24,8 +25,9 @@ export default TabNav = TabNavigator({
     }
   },
   Professor: {
-    screen: CourseSearchScreen,
+    screen: ProfessorSearchScreen,
     navigationOptions: {
+      header: null,
       title: 'Professor',
       tabBarLabel: 'Professor',
       tabBarIcon: ({ tintColor, focused }) => (

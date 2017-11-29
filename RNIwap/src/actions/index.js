@@ -3,6 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import * as types from './types';
 
 import * as courseActions from './course';
+import * as professorActions from './professor';
 import * as authActions from './auth';
 
 export const appLoading = () => dispatch => dispatch({
@@ -20,7 +21,8 @@ export const navigateToMainTabView = NavigationActions.navigate({
 let actions = {
   appLoading,
   ...authActions,
-  ...courseActions
+  ...courseActions,
+  ...professorActions
 };
 
 export default actions;

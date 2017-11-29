@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const fp = require('lodash/fp');
 import React from 'react';
 import { Animated, ScrollView, StatusBar, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
@@ -9,6 +10,7 @@ from "victory-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ModelBox from '../components/ModelBox';
+import Loading from '../components/Loading';
 
 import SectionList from '../components/SectionList';
 import FavoriteButton from '../components/FavoriteButton';
@@ -73,9 +75,28 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   modal: {
-    height: 130
+    height: 260
   }
 });
+
+const reducers = {
+  'Default': {
+    fn: fp.get('id'),
+    icon: 'ios-funnel-outline'
+  },
+  'Instructor': {
+    fn: (section) => {
+      return _.join([_.get(section, 'Professors.0.firstName'), _.get(section, 'Professors.0.lastName')], ', ');
+    },
+    icon: 'ios-person-outline'
+  },
+  'Term': {
+    fn: (section) => {
+      return _.join([_.get(section, 'year'), _.get(section, 'term')], ', ');
+    },
+    icon: 'ios-calendar-outline'
+  }
+};
 
 class CourseScreen extends React.Component {
   constructor(props) {
@@ -83,7 +104,9 @@ class CourseScreen extends React.Component {
 
     this.state = {
       id: null,
-      reducer: false,
+      reducer: reducers.Default,
+      course: null,
+      reducedSections: null,
       plotData: null
     };
   }
@@ -106,8 +129,13 @@ class CourseScreen extends React.Component {
     this.updatePlotData(newProps, this.state);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.reducer != nextState.reducer || this.state.course != nextState.course) {
+      this.reduceSectionBy(nextState.reducer, nextState.course.Sections);
+    }
+  }
+
   updatePlotData (newProps, state) {
-    console.log('mount', newProps);
     if (!_.has(newProps, [ 'courses', state.id, 'isPending' ])) return;
     let course = newProps.courses[state.id];
     if (!course.isPending) {
@@ -124,9 +152,13 @@ class CourseScreen extends React.Component {
           );
         });
       }
-      console.log('plot data', plotData);
-      this.setState({ plotData });
+      this.setState({ course, plotData });
     }
+  }
+
+  reduceSectionBy ({ fn }, sections = null) {
+    let reducedSections = _.map(reduce(sections || this.state.course.Sections, fn), (v, k) => _.set(v, '_id', k));
+    this.setState({ reducedSections });
   }
 
   handleScroll (event) {
@@ -202,8 +234,11 @@ class CourseScreen extends React.Component {
 
   render() {
     let { dispatch } = this.props;
-    let { courses } = this.props;
-    let course = courses[this.state.id] || {};
+    let { course } = this.state;
+
+    if (!course || course.isPending) {
+      return <Loading />;
+    }
 
     return (
       <Container style={{ backgroundColor: '#fff' }}>
@@ -225,12 +260,14 @@ class CourseScreen extends React.Component {
               <Text style={styles.subtitle}>Sections</Text>
               <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                 <TouchableWithoutFeedback onPress={() => this.refs.linkModel.open()}>
-                  <Icon name="ios-funnel-outline" style={{ fontSize: 24 }} />
+                  <View style={{ paddingLeft: 10, paddingRight: 5 }}>
+                    <Icon name={this.state.reducer.icon || 'ios-funnel-outline'} style={{ fontSize: 24 }} />
+                  </View>
                 </TouchableWithoutFeedback>
               </View>
             </View>
             <View>
-              <SectionList sections={course.Sections} />
+              <SectionList sections={this.state.reducedSections} />
             </View>
             <View style={styles.footContainer}>
               <FavoriteButton />
@@ -238,11 +275,23 @@ class CourseScreen extends React.Component {
           </Content>
         </ScrollView>
 
-        <ModelBox style={styles.modal} position="bottom" ref="linkModel">
+        <ModelBox style={{ height: reducers.length * 65 + 65 }} position="bottom" ref="linkModel">
           <Text style={styles.subtitle}>Link sections by</Text>
-          <Button block light style={{ marginTop: 20 }}>
-            <Text>Instructor</Text>
-          </Button>
+          {_.map(reducers, (reducer, key) => (
+            <Button block
+              light={reducer != this.state.reducer}
+              success={reducer == this.state.reducer}
+              style={{ marginTop: 20 }}
+              key={key}
+              onPress={
+                () => {
+                  this.setState({ reducer: reducers[key] });
+                  this.refs.linkModel.close();
+                }
+              }>
+              <Text>{key}</Text>
+            </Button>
+          ))}
         </ModelBox>
       </Container>
     );

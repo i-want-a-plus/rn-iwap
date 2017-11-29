@@ -22,6 +22,12 @@ export const MainNavigator = StackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  Professor: {
+    screen: CourseScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 }, {
   mode: 'stack',
@@ -46,7 +52,7 @@ export const AppNavigator = StackNavigator({
     transitionProps: '123'
   }
 }, {
-  mode: 'modal',
+  mode: 'stack',
   navigationOptions: {
     headerTintColor: '#000',
     headerStyle: {

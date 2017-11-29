@@ -8,6 +8,9 @@ export const AUTH_CHECK = 'AUTH_CHECK';
 export const COURSE = 'COURSE';
 export const COURSE_SEARCH = 'COURSE_SEARCH';
 
+export const PROFESSOR = 'PROFESSOR';
+export const PROFESSOR_SEARCH = 'PROFESSOR_SEARCH';
+
 export const USER_REGISTER = 'USER_REGISTER';
 
 export const USER_LOGIN = 'USER_LOGIN';
