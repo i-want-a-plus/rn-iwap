@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Image, findNodeHandle } from 'react-native';
+import { StyleSheet, View, Image, findNodeHandle, KeyboardAvoidingView } from 'react-native';
 import {
   Container, Header, Content, Form, Item, Input, Label,
   Button, Text
@@ -70,55 +70,59 @@ class LoginScreen extends React.Component {
           style={styles.absolute}
           blurType="dark"
         />
-        <Animatable.View style={styles.content}
-          animation="fadeInUp"
-          duration={300}
-          easing="ease-out">
-          <Content>
-            <View style={{ flexWrap: 'wrap', flexDirection: 'row', paddingBottom: 5 }}>
-              <View
-                style={{ flex: 1 }}>
-                <Button
-                  style={{ flex: 1 }}
-                  onPress={() => this.state.register ? this.setState({ register: false }) : this.props.navigation.goBack()}
-                  small transparent>
-                  <Text>Cancel</Text>
-                </Button>
+        <KeyboardAvoidingView
+          style={{ flex: 1, paddingTop: 20 }}
+          behavior="position">
+          <Animatable.View style={styles.content}
+            animation="fadeInUp"
+            duration={300}
+            easing="ease-out">
+            <Content bounces={false} scrollEnabled={false}>
+              <View style={{ flexWrap: 'wrap', flexDirection: 'row', paddingBottom: 5 }}>
+                <View
+                  style={{ flex: 1 }}>
+                  <Button
+                    style={{ flex: 1 }}
+                    onPress={() => this.state.register ? this.setState({ register: false }) : this.props.navigation.goBack()}
+                    small transparent>
+                    <Text>Cancel</Text>
+                  </Button>
+                </View>
+                {!this.state.register && <View
+                  style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
+                  <Button
+                    onPress={() => this.setState({ register: true })}
+                    small transparent primary>
+                    <Text>Register</Text>
+                  </Button>
+                </View>}
               </View>
-              {!this.state.register && <View
-                style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-                <Button
-                  onPress={() => this.setState({ register: true })}
-                  small transparent primary>
-                  <Text>Register</Text>
-                </Button>
-              </View>}
-            </View>
-            <Form>
-              <Item stackedLabel>
-                <Label>Email</Label>
-                <Input
-                  onChangeText={(t) => this.setState(({ user }) => ({ user: { ...user, email: t } }))}
-                  autoCapitalize='none'
-                  keyboardType='email-address'
-                />
-              </Item>
-              <Item stackedLabel last>
-                <Label>Password</Label>
-                <Input
-                  onChangeText={(t) => this.setState(({ user }) => ({ user: { ...user, password: t } }))}
-                  secureTextEntry={true}
-                />
-              </Item>
-            </Form>
-            <Button
-              style={{ margin: 15, marginTop: 30 }}
-              block primary
-              onPress={() => { this.handleClick(); }}>
-              <Text>{this.state.register ? 'Register' : 'Login'}</Text>
-            </Button>
-          </Content>
-        </Animatable.View>
+              <Form>
+                <Item stackedLabel>
+                  <Label>Email</Label>
+                  <Input
+                    onChangeText={(t) => this.setState(({ user }) => ({ user: { ...user, email: t } }))}
+                    autoCapitalize='none'
+                    keyboardType='email-address'
+                  />
+                </Item>
+                <Item stackedLabel last>
+                  <Label>Password</Label>
+                  <Input
+                    onChangeText={(t) => this.setState(({ user }) => ({ user: { ...user, password: t } }))}
+                    secureTextEntry={true}
+                  />
+                </Item>
+              </Form>
+              <Button
+                style={{ margin: 15, marginTop: 30 }}
+                block primary
+                onPress={() => { this.handleClick(); }}>
+                <Text>{this.state.register ? 'Register' : 'Login'}</Text>
+              </Button>
+            </Content>
+          </Animatable.View>
+        </KeyboardAvoidingView>
       </Container>
     );
   }

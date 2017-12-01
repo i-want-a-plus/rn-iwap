@@ -10,7 +10,7 @@ import ModelBox from '../components/ModelBox';
 import Loading from '../components/Loading';
 import CollapseView from '../components/CollapseView';
 
-import SectionList from '../components/SectionList';
+import CourseList from '../components/CourseList';
 import FavoriteButton from '../components/FavoriteButton';
 import DetailList from '../components/DetailList';
 import GradePlot from '../components/GradePlot';
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   headContainer: {
-    paddingTop: 42,
+    paddingTop: 40,
     marginLeft: 42,
     paddingRight: 30,
     paddingBottom: 10
@@ -52,13 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20
   },
-  subject: {},
-  course: {
-    paddingLeft: 5,
-    fontWeight: '500'
-  },
   title: {
-    marginTop: 5,
     fontSize: 20,
     fontWeight: '800',
     color: '#000'
@@ -78,45 +72,42 @@ const styles = StyleSheet.create({
   }
 });
 
-const reducers = {
+const sorters = {
   'Default': {
-    fn: fp.get('id'),
-    icon: 'ios-funnel-outline'
+    fn: ({ subject, course }) => `${subject} ${course}`,
+    icon: 'ios-arrow-round-down'
   },
-  'Instructor': {
-    fn: (section) => {
-      return _.join([_.get(section, 'Professors.0.firstName'), _.get(section, 'Professors.0.lastName')], ', ');
-    },
+  'Average GPA': {
+    fn: fp.get('averageGpa'),
+    icon: 'ios-create-outline'
+  },
+  'Student Count': {
+    fn: fp.get('totalStudentCount'),
     icon: 'ios-person-outline'
-  },
-  'Term': {
-    fn: (section) => {
-      return _.join([_.get(section, 'year'), _.get(section, 'term')], ', ');
-    },
-    icon: 'ios-calendar-outline'
   }
 };
 
-class CourseScreen extends React.Component {
+class ProfessorScreen extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       id: null,
-      reducer: reducers.Default,
-      course: null,
+      professor: null,
       reducedSections: null,
+      sortedCourses: null,
+      sorter: sorters.Default,
       plotData: null
     };
   }
 
   componentDidMount () {
-    let state = { id: this.props.navigation.state.params.courseId };
+    let state = { id: this.props.navigation.state.params.professorId };
     this.setState(state);
-    if (!this.props.courses[state.id]) {
-      this.props.dispatch(actions.performCourseFetch(state));
+    if (!this.props.professors[state.id]) {
+      this.props.dispatch(actions.performProfessorFetch(state));
     } else {
-      this.updatePlotData(this.props, state);
+      this.updateProfessorState(this.props, state);
     }
   }
 
@@ -124,40 +115,46 @@ class CourseScreen extends React.Component {
     StatusBar.setHidden(false, 'slide');
   }
 
-  componentWillReceiveProps (newProps) {
-    this.updatePlotData(newProps, this.state);
+  componentWillReceiveProps (nextProps) {
+    this.updateProfessorState(nextProps);
+  }
+
+  updateProfessorState (props = null, state = null) {
+    state = state || this.state;
+    props = props || this.props;
+    if (!_.has(props, [ 'professors', state.id, 'isPending' ])) return;
+    let professor = props.professors[state.id];
+    if (!professor.isPending) {
+      this.setState({ professor });
+      this.updatePlotData(professor)
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.state.reducer != nextState.reducer || this.state.course != nextState.course) {
-      this.reduceSectionBy(nextState.reducer, nextState.course.Sections);
+    if (this.state.sorter != nextState.sorter || this.state.professor != nextState.professor) {
+      this.sortCourseBy(nextState.sorter, nextState.professor.Courses);
     }
   }
 
-  updatePlotData (newProps, state) {
-    if (!_.has(newProps, [ 'courses', state.id, 'isPending' ])) return;
-    let course = newProps.courses[state.id];
-    if (!course.isPending) {
-      let plotData = null;
-      if (course.totalStudentCount) {
-        plotData = _.map(reduce(course.Sections), ({ stat }) => {
-          return _.zipWith(
-            gradeMap.gradeText,
-            gradeMap.grade,
-            gradeMap.dist,
-            (text, grade, key) => ({
-              text, grade, value: _.get(stat, key), percent: _.get(stat, key) / stat.totalStudentCount
-            })
-          );
-        });
-      }
-      this.setState({ course, plotData });
-    }
+  updatePlotData (professor) {
+    let sections = _.flatMap(professor.Courses, 'Sections');
+    let reducedSections = reduce(sections);
+    let plotData = _.map(reducedSections, ({ stat }) => {
+      return _.zipWith(
+        gradeMap.gradeText,
+        gradeMap.grade,
+        gradeMap.dist,
+        (text, grade, key) => ({
+          text, grade, value: _.get(stat, key), percent: _.get(stat, key) / stat.totalStudentCount
+        })
+      );
+    });
+    this.setState({ plotData, reducedSections });
   }
 
-  reduceSectionBy ({ fn }, sections = null) {
-    let reducedSections = _.map(reduce(sections || this.state.course.Sections, fn), (v, k) => _.set(v, '_id', k));
-    this.setState({ reducedSections });
+  sortCourseBy ({ fn }, courses = null) {
+    let sortedCourses = _.sortBy(courses || this.state.course, fn);
+    this.setState({ sortedCourses });
   }
 
   handleScroll (event) {
@@ -208,9 +205,9 @@ class CourseScreen extends React.Component {
 
   render() {
     let { dispatch } = this.props;
-    let { course } = this.state;
+    let { professor } = this.state;
 
-    if (!course || course.isPending) {
+    if (!professor || professor.isPending) {
       return <Loading />;
     }
 
@@ -222,27 +219,23 @@ class CourseScreen extends React.Component {
           <Content style={{ paddingBottom: 20 }}>
             {this.goBackButton}
             <View style={styles.headContainer}>
-              <View style={styles.inline}>
-                <Text style={styles.subject}>{course.subject}</Text>
-                <Text style={styles.course}>{course.course}</Text>
-              </View>
-              <Text style={styles.title}>{course.title}</Text>
-              {this.detailList(course)}
+              <Text style={styles.title}>{professor.lastName}, {professor.firstName}</Text>
+              {this.detailList(_.get(this.state.reducedSections, 'undefined.stat'))}
             </View>
             <GradePlot plotData={this.state.plotData} />
             <View style={StyleSheet.flatten([ styles.headContainer, styles.inline ])}>
-              <Text style={styles.subtitle}>Sections</Text>
+              <Text style={styles.subtitle}>Courses</Text>
               <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                 <TouchableWithoutFeedback onPress={() => this.refs.linkModel.open()}>
                   <View style={{ paddingLeft: 10, paddingRight: 5 }}>
-                    <Icon name={this.state.reducer.icon || 'ios-funnel-outline'} style={{ fontSize: 24 }} />
+                    <Icon name={this.state.sorter.icon || 'ios-funnel-outline'} style={{ fontSize: 24 }} />
                   </View>
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            {this.state.reducedSections && <View>
-              <CollapseView collapsed={_.get(this.state.reducedSections, 'length') > 2}>
-                <SectionList sections={this.state.reducedSections} />
+            {this.state.sortedCourses && <View>
+              <CollapseView collapsed={_.get(this.state.sortedCourses, 'length') > 2}>
+                <CourseList courses={this.state.sortedCourses} />
               </CollapseView>
             </View>}
             <View style={styles.footContainer}>
@@ -251,17 +244,17 @@ class CourseScreen extends React.Component {
           </Content>
         </ScrollView>
 
-        <ModelBox style={{ height: reducers.length * 65 + 65 }} position="bottom" ref="linkModel">
-          <Text style={styles.subtitle}>Link sections by</Text>
-          {_.map(reducers, (reducer, key) => (
+        <ModelBox style={{ height: sorters.length * 65 + 65 }} position="bottom" ref="linkModel">
+          <Text style={styles.subtitle}>Sort courses by</Text>
+          {_.map(sorters, (sorter, key) => (
             <Button block
-              light={reducer != this.state.reducer}
-              success={reducer == this.state.reducer}
+              light={sorter != this.state.sorter}
+              success={sorter == this.state.sorter}
               style={{ marginTop: 20 }}
               key={key}
               onPress={
                 () => {
-                  this.setState({ reducer: reducers[key] });
+                  this.setState({ sorter: sorters[key] });
                   this.refs.linkModel.close();
                 }
               }>
@@ -274,6 +267,6 @@ class CourseScreen extends React.Component {
   }
 };
 
-let mapStateToProps = ({ course }) => ({ courses : course });
+let mapStateToProps = ({ professor }) => ({ professors: professor });
 
-export default connect(mapStateToProps)(CourseScreen);
+export default connect(mapStateToProps)(ProfessorScreen);

@@ -11,6 +11,8 @@ import LogoBackground from '../components/LogoBackground';
 
 import actions from '../actions';
 
+import { smartSearch } from '../utils';
+
 class CourseSearchScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,7 @@ class CourseSearchScreen extends React.Component {
   }
 
   handleSearch (query) {
-    this.props.dispatch(actions.performCourseSearch({ subject: query }))
+    this.props.dispatch(actions.performCourseSearch(smartSearch(query)));
   }
 
   render() {

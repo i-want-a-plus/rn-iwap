@@ -12,6 +12,7 @@ import TabNav from './tabNav';
 import LoginScreen from '../containers/LoginScreen';
 import InitScreen from '../containers/InitScreen';
 import CourseScreen from '../containers/CourseScreen';
+import ProfessorScreen from '../containers/ProfessorScreen';
 
 export const MainNavigator = StackNavigator({
   Tab: {
@@ -24,7 +25,7 @@ export const MainNavigator = StackNavigator({
     }
   },
   Professor: {
-    screen: CourseScreen,
+    screen: ProfessorScreen,
     navigationOptions: {
       header: null
     }

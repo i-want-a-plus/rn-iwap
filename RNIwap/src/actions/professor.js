@@ -8,3 +8,10 @@ export const performProfessorSearch = query => dispatch => dispatch({
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });
+
+export const performProfessorFetch = query => dispatch => dispatch({
+  type: types.PROFESSOR,
+  payload: api.fetchProfessor(query)
+}).catch(e => {
+  dispatch({ type: types.GLOBAL_ERROR, payload: e });
+});
