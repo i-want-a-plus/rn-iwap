@@ -5,6 +5,7 @@ import * as types from './types';
 import * as courseActions from './course';
 import * as professorActions from './professor';
 import * as commentActions from './comment';
+import * as favoriteActions from './favorite';
 import * as authActions from './auth';
 
 export const appLoading = () => dispatch => dispatch({
@@ -24,7 +25,8 @@ let actions = {
   ...authActions,
   ...courseActions,
   ...professorActions,
-  ...commentActions
+  ...commentActions,
+  ...favoriteActions
 };
 
 export default actions;

@@ -10,6 +10,7 @@ import auth from './auth';
 import * as courseReducers from './course';
 import * as professorReducers from './professor';
 import * as commentReducers from './comment';
+import * as favoriteReducers from './favorite';
 import * as prReducers from './pr';
 
 const AppReducer = combineReducers({
@@ -26,6 +27,7 @@ const AppReducer = combineReducers({
   ...courseReducers,
   ...professorReducers,
   ...commentReducers,
+  ...favoriteReducers,
   ...prReducers
 });
 

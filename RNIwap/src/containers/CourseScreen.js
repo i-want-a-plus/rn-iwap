@@ -264,7 +264,7 @@ class CourseScreen extends React.Component {
             </View>
             <CommentList type="course" id={this.state.id} ref="commentList" />
             <View style={styles.footContainer}>
-              <FavoriteButton />
+              <FavoriteButton type="course" id={this.state.id} />
             </View>
           </Content>
         </ScrollView>

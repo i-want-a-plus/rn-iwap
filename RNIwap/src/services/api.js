@@ -11,3 +11,11 @@ export const fetchProfessorList = query => Network('professor/ac').get(null, que
 
 export const fetchComment = query => Network('{type}/{id}/comment').get(query);
 export const postComment = query => Network('comment').post(null, query, query);
+
+export const fetchFavorite = query => Network('user/favorite').get();
+
+export const favorite = {
+  fetch: () => Network('user/favorite').get(),
+  add: query => Network('favorite').post(null, query, query),
+  delete: query => Network('favorite{/id}').delete(query)
+};

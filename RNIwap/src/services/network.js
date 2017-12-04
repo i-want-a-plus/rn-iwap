@@ -50,6 +50,7 @@ const Network = endpoint => {
       return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
+        authLayer(),
         { method: 'GET' }
       ));
     },
@@ -58,6 +59,7 @@ const Network = endpoint => {
       return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
+        authLayer(),
         { method: 'PUT' }
       ));
     },
@@ -66,6 +68,7 @@ const Network = endpoint => {
       return request(buildURL(exp, path), Object.assign(
         options,
         defaultOptions,
+        authLayer(),
         { method: 'DELETE' }
       ));
     },

@@ -3,6 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import { api } from '../services';
 import { AsyncStorage } from 'react-native';
 import store from '../store';
+import { performFavoriteFetch } from './favorite';
 
 export const checkAuth = () => new Promise((resolve, reject) => {
   if (store.getState().auth.isLogin) {
@@ -42,6 +43,8 @@ export const performUserLogin = user => dispatch => dispatch({
   ])
 }).then(() => {
   return AsyncStorage.setItem('@iwap:user', JSON.stringify(store.getState().auth.user));
+}).then(() => {
+  return dispatch(performFavoriteFetch());
 }).catch(e => {
   return dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });
@@ -55,9 +58,11 @@ export const performUserLogout = () => dispatch => dispatch({
 
 export const performExtractUserFromStorage = dispatch => {
   return AsyncStorage.getItem('@iwap:user').then(JSON.parse).then(res => {
-    if (res) dispatch({
+    if (res) return dispatch({
       type: types.USER_LOGIN_FULFILLED,
       payload: res
     });
+  }).then(() => {
+    return dispatch(performFavoriteFetch());
   });
 };
