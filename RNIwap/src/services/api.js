@@ -8,3 +8,6 @@ export const fetchCourseList = query => Network('course').get(null, query);
 
 export const fetchProfessor = query => Network('professor/{id}').get(query);
 export const fetchProfessorList = query => Network('professor/ac').get(null, query);
+
+export const fetchComment = query => Network('{type}/{id}/comment').get(query);
+export const postComment = query => Network('comment').post(null, query, query);

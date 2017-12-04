@@ -8,6 +8,8 @@ import {
 import * as Animatable from 'react-native-animatable';
 import { BlurView, VibrancyView } from 'react-native-blur';
 
+import ModelBox from '../components/ModelBox';
+
 import actions from '../actions';
 
 const styles = StyleSheet.create({
@@ -43,11 +45,19 @@ class LoginScreen extends React.Component {
         email: '',
         password: ''
       },
-      register: false
+      register: false,
+      hasClosed: false
     }
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.refs.linkModel.open();
+  }
+
+  componentWillUnmount () {
+    this.setState({ hasClosed: true });
+    this.refs.linkModel.close();
+  }
 
   componentWillReceiveProps ({ auth: { isLogin }, navigation: { goBack } }) {
     if (isLogin) goBack();
@@ -61,41 +71,32 @@ class LoginScreen extends React.Component {
     }
   }
 
+  handleModalClose () {
+    if (!this.state.hasClosed) {
+      this.props.navigation.goBack();
+    }
+  }
+
   render () {
     let { dispatch, navigation } = this.props;
 
     return (
       <Container style={styles.container}>
-        <BlurView
-          style={styles.absolute}
-          blurType="dark"
-        />
-        <KeyboardAvoidingView
-          style={{ flex: 1, paddingTop: 20 }}
-          behavior="position">
-          <Animatable.View style={styles.content}
-            animation="fadeInUp"
-            duration={300}
-            easing="ease-out">
+        <ModelBox
+          style={{ height: 300, paddingLeft: 0, paddingRight: 0 }}
+          position="bottom"
+          ref="linkModel"
+          onClosed={() => { this.handleModalClose(); }}>
             <Content bounces={false} scrollEnabled={false}>
-              <View style={{ flexWrap: 'wrap', flexDirection: 'row', paddingBottom: 5 }}>
+              <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 <View
-                  style={{ flex: 1 }}>
-                  <Button
-                    style={{ flex: 1 }}
-                    onPress={() => this.state.register ? this.setState({ register: false }) : this.props.navigation.goBack()}
-                    small transparent>
-                    <Text>Cancel</Text>
-                  </Button>
-                </View>
-                {!this.state.register && <View
                   style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
                   <Button
-                    onPress={() => this.setState({ register: true })}
+                    onPress={() => this.setState({ register: !this.state.register })}
                     small transparent primary>
-                    <Text>Register</Text>
+                    <Text>{this.state.register ? 'Cancel' : 'Register'}</Text>
                   </Button>
-                </View>}
+                </View>
               </View>
               <Form>
                 <Item stackedLabel>
@@ -121,8 +122,7 @@ class LoginScreen extends React.Component {
                 <Text>{this.state.register ? 'Register' : 'Login'}</Text>
               </Button>
             </Content>
-          </Animatable.View>
-        </KeyboardAvoidingView>
+        </ModelBox>
       </Container>
     );
   }

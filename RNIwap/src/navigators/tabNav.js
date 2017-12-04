@@ -42,6 +42,7 @@ export default TabNav = TabNavigator({
   Settings: {
     screen: SettingScreen,
     navigationOptions: {
+      header: null,
       title: 'Settings',
       tabBarLabel: 'Settings',
       tabBarIcon: ({ tintColor, focused }) => (

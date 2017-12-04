@@ -11,7 +11,8 @@ export const performCourseSearch = query => dispatch => dispatch({
 
 export const performCourseFetch = query => dispatch => dispatch({
   type: types.COURSE,
-  payload: api.fetchCourse(query)
+  payload: api.fetchCourse(query),
+  meta: query
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });

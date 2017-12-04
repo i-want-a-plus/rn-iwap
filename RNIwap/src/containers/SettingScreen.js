@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import {
   Container, Content, Text, Button, List, ListItem, Separator,
-  Left, Body, Right, Icon, Switch
+  Left, Body, Right, Icon, Switch, Header, Title
 } from 'native-base';
 
 import actions from '../actions';
@@ -33,6 +34,15 @@ class TestScreen extends React.Component {
 
     return (
       <Container style={{ backgroundColor: '#f0eff5' }}>
+        <Header>
+          <Left>
+          </Left>
+          <Body>
+            <Title style={{ color: '#000' }}>Settings</Title>
+          </Body>
+          <Right>
+          </Right>
+        </Header>
         <Content>
           <Separator bordered noTopBorder>
             <Text>Account</Text>
@@ -49,11 +59,11 @@ class TestScreen extends React.Component {
               <Text>{auth.user.email}</Text>
             </ListItem>
             <ListItem last onPress={() => { dispatch(actions.performUserLogout()); }}>
-              <Text>Logout</Text>
+              <Text style={{ color: '#f00' }}>Logout</Text>
             </ListItem>
           </List>
           }
-          <Separator bordered />
+          {auth.isLogin && <View><Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
             <ListItem icon first>
               <Left>
@@ -96,10 +106,10 @@ class TestScreen extends React.Component {
                 <Text>Push Notification</Text>
               </Body>
               <Right>
-                <Switch value={false} />
+                <Switch value={false} disabled />
               </Right>
             </ListItem>
-          </List>
+          </List></View>}
           <Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
             <ListItem first>

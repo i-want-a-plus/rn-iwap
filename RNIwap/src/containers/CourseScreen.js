@@ -14,6 +14,8 @@ import SectionList from '../components/SectionList';
 import FavoriteButton from '../components/FavoriteButton';
 import DetailList from '../components/DetailList';
 import GradePlot from '../components/GradePlot';
+import CommentList from '../components/CommentList';
+import CommentForm from '../components/CommentForm';
 
 import { reduce } from '../utils';
 import { gradeMap } from '../utils/reduce';
@@ -206,6 +208,11 @@ class CourseScreen extends React.Component {
     );
   }
 
+  handleCommentSubmit () {
+    this.refs.commentModel.close();
+    this.refs.commentList.getWrappedInstance().fetch();
+  }
+
   render() {
     let { dispatch } = this.props;
     let { course } = this.state;
@@ -245,13 +252,24 @@ class CourseScreen extends React.Component {
                 <SectionList sections={this.state.reducedSections} />
               </CollapseView>
             </View>}
+            <View style={StyleSheet.flatten([ styles.headContainer, styles.inline ])}>
+              <Text style={styles.subtitle}>Comments</Text>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                <TouchableWithoutFeedback onPress={() => this.refs.commentModel.open()}>
+                  <View style={{ paddingLeft: 10, paddingRight: 5 }}>
+                    <Icon name="ios-create-outline" style={{ fontSize: 24 }} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+            <CommentList type="course" id={this.state.id} ref="commentList" />
             <View style={styles.footContainer}>
               <FavoriteButton />
             </View>
           </Content>
         </ScrollView>
 
-        <ModelBox style={{ height: reducers.length * 65 + 65 }} position="bottom" ref="linkModel">
+        <ModelBox style={{ height: reducers.length * 65 + 65, padding: 15 }} position="bottom" ref="linkModel">
           <Text style={styles.subtitle}>Link sections by</Text>
           {_.map(reducers, (reducer, key) => (
             <Button block
@@ -268,6 +286,10 @@ class CourseScreen extends React.Component {
               <Text>{key}</Text>
             </Button>
           ))}
+        </ModelBox>
+
+        <ModelBox style={{ height: 265 }} position="bottom" ref="commentModel">
+          <CommentForm type="course" id={this.state.id} onSubmit={() => { this.handleCommentSubmit(); }}/>
         </ModelBox>
       </Container>
     );

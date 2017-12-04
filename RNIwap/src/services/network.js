@@ -1,6 +1,16 @@
+import _ from 'lodash';
 import request from './request';
 import template from 'url-template';
 import { encodeQueryData } from '../utils';
+import store from '../store';
+
+const authLayer = () => {
+  if (!_.get(store.getState(), 'auth.isLogin')) return {};
+  let token = _.get(store.getState(), 'auth.user.token');
+  return {
+    headers: { 'Authorization': `Bearer ${token}` }
+  };
+};
 
 const Network = endpoint => {
 
@@ -25,9 +35,10 @@ const Network = endpoint => {
 
   return {
     post: (exp, path, body, options = {}) => {
-      return request(buildURL(exp, path), Object.assign(
+      return request(buildURL(exp, path), _.defaultsDeep(
         options,
         defaultOptions,
+        authLayer(),
         {
           method: 'POST',
           body: JSON.stringify(body)

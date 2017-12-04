@@ -32,7 +32,8 @@ var styles = StyleSheet.create({
     shadowOpacity: 0.3,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    padding: 15
+    padding: 0,
+    paddingTop: 15
   },
 
   handlerContainer: {

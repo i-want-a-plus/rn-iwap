@@ -21,8 +21,8 @@ export function courseSearch (state = initialState, action) {
 };
 
 export function course (state = {}, action) {
-  if (!action.payload || !action.payload.id) return state;
-  let id = action.payload.id;
+  if (!action.meta) return state;
+  let id = action.meta.id;
   switch (action.type) {
     case `${types.COURSE}_PENDING`:
       return Object.assign({}, state, { [id]: { isPending: true } });
