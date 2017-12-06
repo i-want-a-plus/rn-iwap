@@ -11,7 +11,10 @@ export const performFavoriteFetch = () => dispatch => dispatch({
 
 export const performFavoriteAdd = (query, meta) => dispatch => dispatch({
   type: types.FAVORITE_ADD,
-  payload: api.favorite.add(query),
+  payload: Promise.all([
+    dispatch(performAuthCheck()),
+    api.favorite.add(query)
+  ]),
   meta
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
@@ -19,7 +22,10 @@ export const performFavoriteAdd = (query, meta) => dispatch => dispatch({
 
 export const performFavoriteDelete = (query, meta) => dispatch => dispatch({
   type: types.FAVORITE_DELETE,
-  payload: api.favorite.delete(query),
+  payload: Promise.all([
+    dispatch(performAuthCheck()),
+    api.favorite.delete(query)
+  ]),
   meta
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });

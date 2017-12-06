@@ -13,18 +13,25 @@ class CommentForm extends React.Component {
     super(props);
 
     this.state = {
-      params: {}
+      params: {},
+      prId: null
     }
   }
 
   handleSubmit () {
     let { dispatch, type, id } = this.props;
-    dispatch(actions.performCommentSubmit({ ...this.state.params, type, id })).then(() => {
-      this.props.onSubmit();
+    let prId = _.uniqueId();
+    this.setState({ prId }, () => {
+      return dispatch(actions.performCommentSubmit({ ...this.state.params, type, id }, { id: prId }));
     });
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log(nextProps, this.state.prId);
+    let pr = _.get(nextProps.pr, this.state.prId);
+    if (!_.isEmpty(pr.data)) {
+      this.props.onSubmit();
+    }
   }
 
   render() {
@@ -69,4 +76,6 @@ CommentForm.propTypes = {
   id: PropTypes.number
 };
 
-export default connect()(CommentForm);
+let mapStateToProps = ({ pr }) => ({ pr });
+
+export default connect(mapStateToProps)(CommentForm);

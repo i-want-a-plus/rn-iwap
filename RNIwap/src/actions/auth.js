@@ -63,6 +63,8 @@ export const performExtractUserFromStorage = dispatch => {
       payload: res
     });
   }).then(() => {
-    return dispatch(performFavoriteFetch());
+    if (store.getState().auth.isLogin) {
+      return dispatch(performFavoriteFetch());
+    }
   });
 };

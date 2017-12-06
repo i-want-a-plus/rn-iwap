@@ -34,6 +34,7 @@ class HeaderWithSearchBar extends React.Component {
           <Icon name="ios-search" />
           <Input placeholder={this.props.placeholder}
             autoCapitalize="none"
+            autoCorrect={false}
             blurOnSubmit={true}
             returnKeyType="search"
             clearButtonMode="always"

@@ -244,7 +244,7 @@ class ProfessorScreen extends React.Component {
           </Content>
         </ScrollView>
 
-        <ModelBox style={{ height: sorters.length * 65 + 65 }} position="bottom" ref="linkModel">
+        <ModelBox style={{ height: sorters.length * 65 + 65, padding: 15 }} position="bottom" ref="linkModel">
           <Text style={styles.subtitle}>Sort courses by</Text>
           {_.map(sorters, (sorter, key) => (
             <Button block
