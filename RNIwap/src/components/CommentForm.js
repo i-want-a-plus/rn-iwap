@@ -33,6 +33,7 @@ class CommentForm extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log(nextProps);
     let pr = _.get(nextProps.pr, this.state.prId);
     if (!_.isEmpty(pr.data)) {
       this.props.onSubmit();

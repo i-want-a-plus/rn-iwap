@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
   lineC: {
     marginTop: 5,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
   },
   lineCp: {
     flexDirection: 'row',
