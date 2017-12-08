@@ -56,11 +56,14 @@ const Network = endpoint => {
     },
 
     update: (exp, path, body, options = {}) => {
-      return request(buildURL(exp, path), Object.assign(
+      return request(buildURL(exp, path), _.defaultsDeep(
         options,
         defaultOptions,
         authLayer(),
-        { method: 'PUT' }
+        {
+          method: 'PUT',
+          body: JSON.stringify(body)
+        }
       ));
     },
 

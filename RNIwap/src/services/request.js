@@ -6,6 +6,8 @@ export default function request (endpoint, options) {
     if (!endpoint) reject(new Error('URL parameter required'));
     if (!options) reject(new Error('Options parameter required'));
 
+    console.log('fetch', endpoint, options);
+
     fetch(endpoint, options)
       .then(response => {
         if (response.status === 204) resolve(null);

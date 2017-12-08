@@ -31,13 +31,24 @@ export const performMyCommentListFetch = () => dispatch => dispatch({
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });
 
-export const performCommentDelete = (query) => dispatch => dispatch({
+export const performCommentDelete = query => dispatch => dispatch({
   type: types.COMMENT_DELETE,
   payload: Promise.all([
     dispatch(performAuthCheck()),
     api.comment.delete(query)
   ]),
   meta: query
+}).catch(e => {
+  dispatch({ type: types.GLOBAL_ERROR, payload: e });
+});
+
+export const performCommentUpdate = (query, meta) => dispatch => dispatch({
+  type: types.COMMENT_UPDATE,
+  payload: Promise.all([
+    dispatch(performAuthCheck()),
+    api.comment.update(query)
+  ]),
+  meta: { ...meta, query}
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });

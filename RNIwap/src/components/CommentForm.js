@@ -18,16 +18,21 @@ class CommentForm extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.setState({ params: _.pick(this.props, 'rating', 'content') });
+  }
+
   handleSubmit () {
     let { dispatch, type, id } = this.props;
     let prId = _.uniqueId();
     this.setState({ prId }, () => {
-      return dispatch(actions.performCommentSubmit({ ...this.state.params, type, id }, { id: prId }));
+      return this.props.commentId
+        ? dispatch(actions.performCommentUpdate({ ...this.state.params, id: this.props.commentId }, { id: prId }))
+        : dispatch(actions.performCommentSubmit({ ...this.state.params, type, id }, { id: prId }));
     });
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps, this.state.prId);
     let pr = _.get(nextProps.pr, this.state.prId);
     if (!_.isEmpty(pr.data)) {
       this.props.onSubmit();
@@ -56,6 +61,7 @@ class CommentForm extends React.Component {
             autoGrow={false}
             style={{ height: 100 }}
             placeholder="Your comments here..."
+            value={this.state.params.content}
             onChangeText={(t) => this.setState(({ params }) => ({ params: { ...params, content: t } }))}
             autoCapitalize='none'
           />
@@ -73,7 +79,10 @@ class CommentForm extends React.Component {
 
 CommentForm.propTypes = {
   type: PropTypes.string,
-  id: PropTypes.number
+  id: PropTypes.number,
+  commentId: PropTypes.number,
+  rating: PropTypes.number,
+  content: PropTypes.string
 };
 
 let mapStateToProps = ({ pr }) => ({ pr });

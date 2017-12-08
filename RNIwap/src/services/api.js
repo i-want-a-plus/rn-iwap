@@ -15,6 +15,7 @@ export const fetchProfessorList = query => Network('professor/ac').get(null, que
 export const fetchComment = query => Network('{type}/{id}/comment').get(query);
 export const postComment = query => Network('comment').post(null, query, query);
 export const comment = {
+  update: query => Network('comment{/id}').update(query, null, query),
   delete: query => Network('comment{/id}').delete(query)
 };
 

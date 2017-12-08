@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import {
   Container, Header, Left, Body, Right, Title, Content, Button, Icon
@@ -11,26 +11,39 @@ import Swipeout from 'react-native-swipeout';
 import actions from '../actions';
 
 import CommentCard from '../components/CommentCard';
+import CommentForm from '../components/CommentForm';
+import ModelBox from '../components/ModelBox';
 
 class CommentListScreen extends React.Component {
   constructor(props) {
     super(props);
-  }
 
-  fetch () {
-    // this.props.dispatch(actions.performCommentFetch(this.props, this.state));
-  }
-
-  componentDidMount () {
-    // this.fetch();
-  }
-
-  componentWillReceiveProps (nextProps) {
-    console.log(nextProps);
+    this.state = {
+      current: {
+        commentId: null,
+        rating: null,
+        content: null
+      }
+    };
   }
 
   handleDelete (commentId) {
     this.props.dispatch(actions.performCommentDelete({ id: commentId }));
+  }
+
+  handleEdit ({ id, rating, content }) {
+    this.commentRef[`REF-FLATLIST-${id}`]._close();
+    this.setState({
+      current: {
+        id, rating, content
+      }
+    }, () => {
+      this.refs.commentModel.open();
+    });
+  }
+
+  handleCommentSubmit () {
+    this.refs.commentModel.close();
   }
 
   commentList () {
@@ -47,22 +60,35 @@ class CommentListScreen extends React.Component {
     return (
       <View>
         <FlatList
+          ref="REF-FLATLIST"
           style={{ paddingTop: 10, paddingBottom: 10 }}
           data={_.toArray(myComment)}
           keyExtractor={({ id }) => id}
           renderItem={({ item }) => (
             <Swipeout
+              autoClose={true}
+              ref={(ref) => this.commentRef = {...this.commentRef, [`REF-FLATLIST-${item.id}`]: ref}}
               right={[{
                 backgroundColor: '#fff',
                 component:
-                  <View style={{ padding: 10 }}>
-                    <Button danger onPress={() => { this.handleDelete(item.id); }}>
+                  <View style={{ paddingTop: 10, paddingRight: 5, paddingLeft: 10 }}>
+                    <Button danger large block onPress={() => { this.handleDelete(item.id); }}>
                       <Icon active name="trash" />
+                    </Button>
+                  </View>
+              }, {
+                backgroundColor: '#fff',
+                component:
+                  <View style={{ paddingTop: 10, paddingLeft: 5, paddingRight: 10 }}>
+                    <Button success large block onPress={() => { this.handleEdit(item); }}>
+                      <Icon active name="create" />
                     </Button>
                   </View>
               }]}
               backgroundColor='#fff'>
-              <CommentCard comment={item} />
+              <TouchableWithoutFeedback onPress={() => { this.handlePress(item); }}>
+                <CommentCard comment={item} />
+              </TouchableWithoutFeedback>
             </Swipeout>
           )}
         />
@@ -89,6 +115,15 @@ class CommentListScreen extends React.Component {
         <Content>
           {this.commentList()}
         </Content>
+
+        <ModelBox style={{ height: 265 }} position="bottom" ref="commentModel">
+          <CommentForm
+            commentId={this.state.current.id}
+            rating={this.state.current.rating}
+            content={this.state.current.content}
+            onSubmit={() => { this.handleCommentSubmit(); }}
+          />
+        </ModelBox>
       </Container>
     );
   }

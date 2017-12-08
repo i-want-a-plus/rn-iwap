@@ -11,21 +11,6 @@ import actions from '../actions';
 class TestScreen extends React.Component {
   constructor (props) {
     super(props);
-
-    this.state = {
-      appVersion: 'NOT_APPLICABLE'
-    };
-  }
-
-  componentDidMount () {
-    this.getVersion();
-  }
-
-  getVersion () {
-    if (process.env.NODE_ENV === 'production') {
-      let VersionNumber = require('react-native-version-number');
-      if (VersionNumber) this.setState({ appVersion: `${VersionNumber.appVersion}` });
-    }
   }
 
   render () {
@@ -112,9 +97,6 @@ class TestScreen extends React.Component {
           </List></View>}
           <Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
-            <ListItem first>
-              <Text>Version {this.state.appVersion}</Text>
-            </ListItem>
             <ListItem icon>
               <Body>
                 <Text>Licenses</Text>

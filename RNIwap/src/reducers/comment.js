@@ -27,6 +27,9 @@ export function myComment (state = {}, action) {
     case `${types.COMMENT_SUBMIT}_FULFILLED`:
       id = action.payload.id;
       return Object.assign({}, state, { [id]: { ...action.payload } });
+    case `${types.COMMENT_UPDATE}_FULFILLED`:
+      id = action.meta.query.id;
+      return Object.assign({}, state, { [id]: { ...action.meta.query } });
     case `${types.COMMENT_DELETE}_FULFILLED`:
       return _.omit(state, action.meta.id);
     default:
