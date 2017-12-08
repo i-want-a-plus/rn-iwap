@@ -15,3 +15,22 @@ export function comment (state = {}, action) {
       return state;
   };
 };
+
+export function myComment (state = {}, action) {
+  switch (action.type) {
+    case `${types.MY_COMMENT_FETCH}_FULFILLED`:
+      let newState = {};
+      _.each(action.payload, c => {
+        _.set(newState, c.id, c);
+      });
+      return newState;
+    case `${types.COMMENT_SUBMIT}_FULFILLED`:
+      id = action.payload.id;
+      return Object.assign({}, state, { [id]: { ...action.payload } });
+    case `${types.COMMENT_DELETE}_FULFILLED`:
+      return _.omit(state, action.meta.id);
+    default:
+      return state;
+  };
+}
+

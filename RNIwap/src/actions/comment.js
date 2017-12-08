@@ -23,3 +23,21 @@ export const performCommentSubmit = (query, meta) => dispatch => dispatch({
 }).catch(e => {
   dispatch({ type: types.GLOBAL_ERROR, payload: e });
 });
+
+export const performMyCommentListFetch = () => dispatch => dispatch({
+  type: types.MY_COMMENT_FETCH,
+  payload: api.user.comment()
+}).catch(e => {
+  dispatch({ type: types.GLOBAL_ERROR, payload: e });
+});
+
+export const performCommentDelete = (query) => dispatch => dispatch({
+  type: types.COMMENT_DELETE,
+  payload: Promise.all([
+    dispatch(performAuthCheck()),
+    api.comment.delete(query)
+  ]),
+  meta: query
+}).catch(e => {
+  dispatch({ type: types.GLOBAL_ERROR, payload: e });
+});

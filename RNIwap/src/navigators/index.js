@@ -13,6 +13,7 @@ import LoginScreen from '../containers/LoginScreen';
 import InitScreen from '../containers/InitScreen';
 import CourseScreen from '../containers/CourseScreen';
 import ProfessorScreen from '../containers/ProfessorScreen';
+import CommentListScreen from '../containers/CommentListScreen';
 
 export const MainNavigator = StackNavigator({
   Tab: {
@@ -26,6 +27,12 @@ export const MainNavigator = StackNavigator({
   },
   Professor: {
     screen: ProfessorScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
+  CommentListScreen: {
+    screen: CommentListScreen,
     navigationOptions: {
       header: null
     }

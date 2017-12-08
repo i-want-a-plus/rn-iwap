@@ -4,6 +4,7 @@ import { api } from '../services';
 import { AsyncStorage } from 'react-native';
 import store from '../store';
 import { performFavoriteFetch } from './favorite';
+import { performMyCommentListFetch } from './comment';
 
 export const checkAuth = () => new Promise((resolve, reject) => {
   if (store.getState().auth.isLogin) {
@@ -64,7 +65,10 @@ export const performExtractUserFromStorage = dispatch => {
     });
   }).then(() => {
     if (store.getState().auth.isLogin) {
-      return dispatch(performFavoriteFetch());
+      return Promise.all([
+        dispatch(performFavoriteFetch()),
+        dispatch(performMyCommentListFetch())
+      ]);
     }
   });
 };

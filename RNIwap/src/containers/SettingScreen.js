@@ -65,7 +65,7 @@ class TestScreen extends React.Component {
           }
           {auth.isLogin && <View><Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
-            <ListItem icon first>
+            {/* <ListItem icon first>
               <Left>
                 <Icon name="star" />
               </Left>
@@ -75,8 +75,8 @@ class TestScreen extends React.Component {
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
-            </ListItem>
-            <ListItem icon>
+            </ListItem> */}
+            <ListItem icon last onPress={() => { dispatch({ type: 'GOTO', routeName: 'CommentListScreen' }); }}>
               <Left>
                 <Icon name="chatboxes" />
               </Left>
@@ -87,7 +87,7 @@ class TestScreen extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem icon>
+            {/* <ListItem icon>
               <Left>
                 <Icon name="alarm" />
               </Left>
@@ -108,7 +108,7 @@ class TestScreen extends React.Component {
               <Right>
                 <Switch value={false} disabled />
               </Right>
-            </ListItem>
+            </ListItem> */}
           </List></View>}
           <Separator bordered />
           <List style={{ backgroundColor: '#fff' }}>
